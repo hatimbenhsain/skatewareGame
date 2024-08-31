@@ -45,6 +45,8 @@ public class PlayerController : MonoBehaviour
 
     public float drag;
 
+    public float gravityModifier=1f;
+
     void Start()
     {
         body=GetComponent<Rigidbody>();
@@ -79,7 +81,7 @@ public class PlayerController : MonoBehaviour
     public void SetMoveVector(){
         //slow=Input.GetMouseButton(1);
 
-        moveDir=new Vector3(Input.GetAxisRaw("Horizontal"),0,Input.GetAxisRaw("Vertical")).normalized;
+        moveDir=GetInputVector();
 
         float acc=acceleration;
         float ms=maxSpeed;
@@ -135,6 +137,10 @@ public class PlayerController : MonoBehaviour
         }else{
             fauxGravityBody.halveGravity=false;
         }
+    }
+
+    public Vector3 GetInputVector(){
+        return new Vector3(Input.GetAxisRaw("Horizontal"),0,Input.GetAxisRaw("Vertical")).normalized;
     }
 
     public void SetCameraPosition(){
