@@ -18,7 +18,7 @@ public class InterpretArduino : MonoBehaviour
         float y = int.Parse(values[1]);
         x = -2 * ((x / 1023) - 0.5f);
         y = 2 * ((y / 1023) - 0.5f);
-        Debug.Log(new Vector2(x, y));
+        //Debug.Log(new Vector2(x, y));
         currentInput = new Vector2(x, y);
         //tmsg is the information you are bringing into Unity. It comes in as a string that you will parce HERE
     }

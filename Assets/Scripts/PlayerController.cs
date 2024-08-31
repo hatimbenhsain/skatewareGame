@@ -5,6 +5,8 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
+    public InterpretArduino interpretArduino;
+    
     public float moveSpeed=0f;
     private Vector3 moveDir;
     private Rigidbody body;
@@ -140,7 +142,10 @@ public class PlayerController : MonoBehaviour
     }
 
     public Vector3 GetInputVector(){
-        return new Vector3(Input.GetAxisRaw("Horizontal"),0,Input.GetAxisRaw("Vertical")).normalized;
+        //return new Vector3(Input.GetAxisRaw("Horizontal"),0,Input.GetAxisRaw("Vertical")).normalized;
+        Vector2 input = interpretArduino.GetCurrentInput();
+        Debug.Log(input);
+        return new Vector3(input.y, 0, input.x);
     }
 
     public void SetCameraPosition(){
