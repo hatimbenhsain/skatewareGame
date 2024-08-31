@@ -37,6 +37,10 @@ public class PlayerController : MonoBehaviour
 
     private bool reachedPeak=false;
 
+    public float cameraLerpSpeed=10f;
+
+    public bool moveCamera=false;
+
     void Start()
     {
         body=GetComponent<Rigidbody>();
@@ -123,12 +127,15 @@ public class PlayerController : MonoBehaviour
     }
 
     public void SetCameraPosition(){
+        if (moveCamera){
         //Lerping the camera to player position
-        float cameraLerp=10f;
-        if(slow){
-            camera.transform.localPosition=Vector3.Lerp(camera.transform.localPosition,cameraCloseTransform.transform.localPosition,cameraLerp*Time.deltaTime);
-        }else{
-            camera.transform.localPosition=Vector3.Lerp(camera.transform.localPosition,cameraFarTransform.transform.localPosition,cameraLerp*Time.deltaTime);
+            if(slow){
+                camera.transform.position=Vector3.Lerp(camera.transform.position,cameraCloseTransform.transform.position,cameraLerpSpeed*Time.deltaTime);
+                camera.transform.rotation=Quaternion.Lerp(camera.transform.rotation,cameraCloseTransform.transform.rotation,cameraLerpSpeed*Time.deltaTime);
+            }else{
+                camera.transform.position=Vector3.Lerp(camera.transform.position,cameraFarTransform.transform.position,cameraLerpSpeed*Time.deltaTime);
+                camera.transform.rotation=Quaternion.Lerp(camera.transform.rotation,cameraFarTransform.transform.rotation,cameraLerpSpeed*Time.deltaTime);
+            }
         }
     }
 
