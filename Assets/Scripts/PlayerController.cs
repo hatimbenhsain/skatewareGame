@@ -156,4 +156,10 @@ public class PlayerController : MonoBehaviour
             grounded=false;
         }
     }
+
+    private void OnTriggerEnter(Collider other){
+        if(other.gameObject.tag=="Planet"){
+            fauxGravityBody.ChangeAttractor(other.gameObject.GetComponentInParent<FauxGravityAttractor>());
+        }
+    }
 }

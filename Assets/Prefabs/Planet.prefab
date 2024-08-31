@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 5568044760168294919}
   m_Layer: 0
   m_Name: Gravity Field
-  m_TagString: Untagged
+  m_TagString: Planet
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -27,9 +27,9 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1085199319435665204}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 2.4614, y: 2.4614, z: 2.4614}
+  m_LocalScale: {x: 2.176255, y: 2.176255, z: 2.176255}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 5318332694759755112}
@@ -116,7 +116,7 @@ GameObject:
   - component: {fileID: 1531820935665648661}
   m_Layer: 0
   m_Name: Planet
-  m_TagString: Untagged
+  m_TagString: Planet
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -131,7 +131,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0.42842, y: 0.42842, z: 0.42842}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 5318332694759755112}
@@ -152,7 +152,7 @@ GameObject:
   - component: {fileID: 1159912173563305079}
   m_Layer: 0
   m_Name: Sphere
-  m_TagString: Untagged
+  m_TagString: Planet
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -167,7 +167,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 2.6146, y: 2.6146, z: 2.6146}
+  m_LocalScale: {x: 9.840308, y: 9.840308, z: 9.840308}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 6887399104301898911}
@@ -256,4 +256,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e6c8583947a27e64d90091022962b6d7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gravity: -10
+  gravity: -2
