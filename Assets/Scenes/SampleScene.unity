@@ -133,15 +133,15 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1531820935665648661, guid: b1af1ff96fcb7af40875b154762995eb, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -16
+      value: -9.36
       objectReference: {fileID: 0}
     - target: {fileID: 1531820935665648661, guid: b1af1ff96fcb7af40875b154762995eb, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 1.77
+      value: 5.53
       objectReference: {fileID: 0}
     - target: {fileID: 1531820935665648661, guid: b1af1ff96fcb7af40875b154762995eb, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 11.9
+      value: 3.28
       objectReference: {fileID: 0}
     - target: {fileID: 1531820935665648661, guid: b1af1ff96fcb7af40875b154762995eb, type: 3}
       propertyPath: m_LocalRotation.w
@@ -265,7 +265,7 @@ Light:
   serializedVersion: 10
   m_Type: 1
   m_Shape: 0
-  m_Color: {r: 0.61320746, g: 0.6735124, b: 1, a: 1}
+  m_Color: {r: 0.49371064, g: 0.710987, b: 1, a: 1}
   m_Intensity: 1
   m_Range: 10
   m_SpotAngle: 30
@@ -450,11 +450,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1531820935665648661, guid: b1af1ff96fcb7af40875b154762995eb, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -5.98
+      value: -4.39
       objectReference: {fileID: 0}
     - target: {fileID: 1531820935665648661, guid: b1af1ff96fcb7af40875b154762995eb, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 11.9
+      value: 8.88
       objectReference: {fileID: 0}
     - target: {fileID: 1531820935665648661, guid: b1af1ff96fcb7af40875b154762995eb, type: 3}
       propertyPath: m_LocalRotation.w
@@ -651,8 +651,16 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 1155869402676122819, guid: 9cd9c8ff9daa5404d9c13bccad2673f0, type: 3}
+      propertyPath: drag
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 1155869402676122819, guid: 9cd9c8ff9daa5404d9c13bccad2673f0, type: 3}
+      propertyPath: maxSpeed
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 1155869402676122819, guid: 9cd9c8ff9daa5404d9c13bccad2673f0, type: 3}
       propertyPath: jumpForce
-      value: 3
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 1155869402676122819, guid: 9cd9c8ff9daa5404d9c13bccad2673f0, type: 3}
       propertyPath: deceleration
@@ -665,6 +673,10 @@ PrefabInstance:
     - target: {fileID: 1155869402676122819, guid: 9cd9c8ff9daa5404d9c13bccad2673f0, type: 3}
       propertyPath: cameraLerpSpeed
       value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 1155869402676122819, guid: 9cd9c8ff9daa5404d9c13bccad2673f0, type: 3}
+      propertyPath: gravityModifier
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 4393643318315673246, guid: 9cd9c8ff9daa5404d9c13bccad2673f0, type: 3}
       propertyPath: attractor
