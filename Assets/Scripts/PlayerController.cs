@@ -41,13 +41,19 @@ public class PlayerController : MonoBehaviour
 
     public bool moveCamera=false;
 
+    public float airResistance=1f;
+
+    public float drag;
+
+    public float gravityModifier=1f;
+
     void Start()
     {
         body=GetComponent<Rigidbody>();
         moveVector=Vector3.zero;
         camera=Camera.main.gameObject;
         fauxGravityBody=GetComponent<FauxGravityBody>();
-
+        drag=body.drag;
     }
 
     // Update is called once per frame
@@ -58,7 +64,7 @@ public class PlayerController : MonoBehaviour
 
         Jump();
 
-        SetCameraPosition();
+        
 
         // Distance between current attractor and body
         float dis=Vector3.Distance(transform.position,fauxGravityBody.attractor.transform.position);
@@ -75,7 +81,7 @@ public class PlayerController : MonoBehaviour
     public void SetMoveVector(){
         //slow=Input.GetMouseButton(1);
 
-        moveDir=new Vector3(Input.GetAxisRaw("Horizontal"),0,Input.GetAxisRaw("Vertical")).normalized;
+        moveDir=GetInputVector();
 
         float acc=acceleration;
         float ms=maxSpeed;
@@ -89,7 +95,7 @@ public class PlayerController : MonoBehaviour
             dec=dec*k;
         }
 
-        if(moveDir.magnitude>0f){
+        if(moveDir.magnitude>0f && grounded){
             if(moveVector.magnitude<0.05f){
                 //Minimum speed at smallest joystick movement
                 moveVector=moveDir*initSpeed;
@@ -107,12 +113,19 @@ public class PlayerController : MonoBehaviour
 
         moveVector=Vector3.ClampMagnitude(moveVector,ms);
 
+        if(fauxGravityBody.insideGravityField){
+            body.drag=drag;
+        }else{
+            body.drag=0;
+        }
+
     }
 
     public void Jump(){
         //Handling Jump when key down
         if(Input.GetKeyDown(KeyCode.Space) && grounded){
             body.velocity=transform.up*jumpForce;
+            body.velocity+=moveVector;
             Debug.Log("jump");
         }
 
@@ -124,6 +137,10 @@ public class PlayerController : MonoBehaviour
         }else{
             fauxGravityBody.halveGravity=false;
         }
+    }
+
+    public Vector3 GetInputVector(){
+        return new Vector3(Input.GetAxisRaw("Horizontal"),0,Input.GetAxisRaw("Vertical")).normalized;
     }
 
     public void SetCameraPosition(){
@@ -142,6 +159,23 @@ public class PlayerController : MonoBehaviour
     void FixedUpdate() {
         // Moving the body (except for jump)
         body.MovePosition(body.position+transform.TransformDirection(moveVector)*Time.deltaTime);
+
+        //Vector3 velocity=body.velocity-body.velocity.normalized*airResistance;
+        
+        // if(Mathf.Sign(velocity.x)!=Mathf.Sign(body.velocity.x)){
+        //     velocity.x=0f;
+        // }
+        // if(Mathf.Sign(velocity.y)!=Mathf.Sign(body.velocity.y)){
+        //     velocity.y=0f;
+        // }
+        // if(Mathf.Sign(velocity.z)!=Mathf.Sign(body.velocity.z)){
+        //     velocity.z=0f;
+        // }
+
+        //body.velocity=velocity;
+
+        SetCameraPosition();
+
     }
 
     private void OnCollisionEnter(Collision other) {
@@ -154,6 +188,18 @@ public class PlayerController : MonoBehaviour
     private void OnCollisionExit(Collision other) {
         if(other.gameObject.tag=="Planet"){
             grounded=false;
+        }
+    }
+
+    private void OnTriggerEnter(Collider other){
+        if(other.gameObject.tag=="Planet"){
+            fauxGravityBody.ChangeAttractor(other.gameObject.GetComponentInParent<FauxGravityAttractor>());
+        }
+    }
+
+    private void OnTriggerExit(Collider other){
+        if(other.gameObject.tag=="Planet"){
+            fauxGravityBody.ExitGravityField(other.gameObject.GetComponentInParent<FauxGravityAttractor>());
         }
     }
 }
