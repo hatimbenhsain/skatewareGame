@@ -652,7 +652,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1155869402676122819, guid: 9cd9c8ff9daa5404d9c13bccad2673f0, type: 3}
       propertyPath: jumpForce
-      value: 5
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 1155869402676122819, guid: 9cd9c8ff9daa5404d9c13bccad2673f0, type: 3}
       propertyPath: airResistance

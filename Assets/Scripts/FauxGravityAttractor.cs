@@ -27,12 +27,12 @@ public class FauxGravityAttractor : MonoBehaviour
 
         // Halfing gravity when holding jump button
         if(body.GetComponent<FauxGravityBody>().halveGravity){
-            g=g/2f;
+            g=g*0.5f;
         }
 
         //Lowering gravity if outside field
         if(!insideGravityField){
-            g=g*0.1f;
+            g=g*0.5f;
         }
 
         body.GetComponent<Rigidbody>().AddForce(gravityUp*g);

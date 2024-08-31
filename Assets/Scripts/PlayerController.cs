@@ -43,6 +43,7 @@ public class PlayerController : MonoBehaviour
 
     public float airResistance=1f;
 
+    public float drag;
 
     void Start()
     {
@@ -50,7 +51,7 @@ public class PlayerController : MonoBehaviour
         moveVector=Vector3.zero;
         camera=Camera.main.gameObject;
         fauxGravityBody=GetComponent<FauxGravityBody>();
-
+        drag=body.drag;
     }
 
     // Update is called once per frame
@@ -61,7 +62,7 @@ public class PlayerController : MonoBehaviour
 
         Jump();
 
-        SetCameraPosition();
+        
 
         // Distance between current attractor and body
         float dis=Vector3.Distance(transform.position,fauxGravityBody.attractor.transform.position);
@@ -92,7 +93,7 @@ public class PlayerController : MonoBehaviour
             dec=dec*k;
         }
 
-        if(moveDir.magnitude>0f){
+        if(moveDir.magnitude>0f && grounded){
             if(moveVector.magnitude<0.05f){
                 //Minimum speed at smallest joystick movement
                 moveVector=moveDir*initSpeed;
@@ -110,12 +111,19 @@ public class PlayerController : MonoBehaviour
 
         moveVector=Vector3.ClampMagnitude(moveVector,ms);
 
+        if(fauxGravityBody.insideGravityField){
+            body.drag=drag;
+        }else{
+            body.drag=0;
+        }
+
     }
 
     public void Jump(){
         //Handling Jump when key down
         if(Input.GetKeyDown(KeyCode.Space) && grounded){
             body.velocity=transform.up*jumpForce;
+            body.velocity+=moveVector;
             Debug.Log("jump");
         }
 
@@ -159,6 +167,8 @@ public class PlayerController : MonoBehaviour
         // }
 
         //body.velocity=velocity;
+
+        SetCameraPosition();
 
     }
 
