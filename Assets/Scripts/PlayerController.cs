@@ -41,6 +41,9 @@ public class PlayerController : MonoBehaviour
 
     public bool moveCamera=false;
 
+    public float airResistance=1f;
+
+
     void Start()
     {
         body=GetComponent<Rigidbody>();
@@ -142,6 +145,21 @@ public class PlayerController : MonoBehaviour
     void FixedUpdate() {
         // Moving the body (except for jump)
         body.MovePosition(body.position+transform.TransformDirection(moveVector)*Time.deltaTime);
+
+        //Vector3 velocity=body.velocity-body.velocity.normalized*airResistance;
+        
+        // if(Mathf.Sign(velocity.x)!=Mathf.Sign(body.velocity.x)){
+        //     velocity.x=0f;
+        // }
+        // if(Mathf.Sign(velocity.y)!=Mathf.Sign(body.velocity.y)){
+        //     velocity.y=0f;
+        // }
+        // if(Mathf.Sign(velocity.z)!=Mathf.Sign(body.velocity.z)){
+        //     velocity.z=0f;
+        // }
+
+        //body.velocity=velocity;
+
     }
 
     private void OnCollisionEnter(Collision other) {
@@ -160,6 +178,12 @@ public class PlayerController : MonoBehaviour
     private void OnTriggerEnter(Collider other){
         if(other.gameObject.tag=="Planet"){
             fauxGravityBody.ChangeAttractor(other.gameObject.GetComponentInParent<FauxGravityAttractor>());
+        }
+    }
+
+    private void OnTriggerExit(Collider other){
+        if(other.gameObject.tag=="Planet"){
+            fauxGravityBody.ExitGravityField(other.gameObject.GetComponentInParent<FauxGravityAttractor>());
         }
     }
 }
