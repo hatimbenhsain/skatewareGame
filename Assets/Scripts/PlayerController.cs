@@ -49,7 +49,12 @@ public class PlayerController : MonoBehaviour
 
     public float gravityModifier=1f;
 
-    private FauxGravityAttractor[] attractors;
+    private float kickTimer;
+    public float kickMaxTime=1f;
+
+    private bool justJumped=false;
+    private float targetFOV=60f;
+    public float cameraFOVLerpSpeed=.1f;
 
     void Start()
     {
@@ -58,7 +63,6 @@ public class PlayerController : MonoBehaviour
         camera=Camera.main.gameObject;
         fauxGravityBody=GetComponent<FauxGravityBody>();
         drag=body.drag;
-        attractors=FindObjectsOfType<FauxGravityAttractor>();
     }
 
     // Update is called once per frame
@@ -67,7 +71,10 @@ public class PlayerController : MonoBehaviour
 
         SetMoveVector();
 
+        Kick();
+
         Jump();
+
 
         
 
@@ -80,6 +87,7 @@ public class PlayerController : MonoBehaviour
             reachedPeak=true;
             Debug.Log("reached peak");
         }
+
  
     }
 
@@ -131,7 +139,7 @@ public class PlayerController : MonoBehaviour
         if(Input.GetKeyDown(KeyCode.Space) && grounded){
             body.velocity=transform.up*jumpForce;
             body.velocity+=moveVector;
-            Debug.Log("jump");
+            justJumped=true;
         }
 
         //Handling continuous jump button press
@@ -144,6 +152,19 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+
+    public void Kick(){
+
+        if(Input.GetKeyDown(KeyCode.Return) && kickTimer>kickMaxTime && grounded){
+            kickTimer=0f;
+            moveVector=moveVector+moveDir*maxSpeed;
+            moveVector=Vector3.ClampMagnitude(moveVector,maxSpeed);
+            //moveVector=moveVector*(maxSpeed/moveVector.magnitude);
+        }
+
+        kickTimer+=Time.deltaTime;
+    }
+
     public Vector3 GetInputVector(){
         Vector3 v1=new Vector3(Input.GetAxisRaw("Horizontal"),0,Input.GetAxisRaw("Vertical")).normalized;
         Vector2 input = interpretArduino.GetCurrentInput();
@@ -154,7 +175,7 @@ public class PlayerController : MonoBehaviour
         return v3;
     }
 
-    public void SetCameraPosition(){
+    public void SetCamera(){
         if (moveCamera){
         //Lerping the camera to player position
             if(slow){
@@ -164,6 +185,13 @@ public class PlayerController : MonoBehaviour
                 camera.transform.position=Vector3.Lerp(camera.transform.position,cameraFarTransform.transform.position,cameraLerpSpeed*Time.deltaTime);
                 camera.transform.rotation=Quaternion.Lerp(camera.transform.rotation,cameraFarTransform.transform.rotation,cameraLerpSpeed*Time.deltaTime);
             }
+
+            targetFOV=Mathf.Lerp(targetFOV,60,Time.deltaTime*cameraFOVLerpSpeed);
+            if(justJumped){
+                targetFOV=120;
+                justJumped=false;
+            }
+            camera.GetComponent<Camera>().fieldOfView=Mathf.Lerp(camera.GetComponent<Camera>().fieldOfView,targetFOV,10*Time.deltaTime);
         }
     }
 
@@ -185,7 +213,7 @@ public class PlayerController : MonoBehaviour
 
         //body.velocity=velocity;
 
-        SetCameraPosition();
+        SetCamera();
 
     }
 
@@ -214,22 +242,4 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    public void FindAttractor(){
-        FauxGravityAttractor currentAttractor=fauxGravityBody.attractor;
-        FauxGravityAttractor newAttractor=currentAttractor;
-        float minDistance=Vector3.Distance(transform.position,currentAttractor.transform.position);
-        float d;
-        for(int i=0;i<attractors.Length;i++){
-            if(attractors[i]!=currentAttractor){
-                d=Vector3.Distance(transform.position,currentAttractor.transform.position);
-                if(d<minDistance*0.75 && d<minDistance){
-                    newAttractor=attractors[i];
-                    minDistance=d;
-                }
-            }
-        }
-        if(newAttractor!=currentAttractor){
-            fauxGravityBody.ChangeAttractor(newAttractor);
-        }
-    }
 }
