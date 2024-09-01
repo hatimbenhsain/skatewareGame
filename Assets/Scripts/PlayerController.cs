@@ -59,6 +59,8 @@ public class PlayerController : MonoBehaviour
     public GameObject tonyHawkModelIdle;
     public GameObject tonyHawkModelKicking;
 
+    public float rotSpeed=10f;
+
     void Start()
     {
         body = GetComponent<Rigidbody>();
@@ -79,7 +81,7 @@ public class PlayerController : MonoBehaviour
         Jump();
 
 
-
+        Animate();        
 
         // Distance between current attractor and body
         float dis = Vector3.Distance(transform.position, fauxGravityBody.attractor.transform.position);
@@ -185,15 +187,28 @@ public class PlayerController : MonoBehaviour
             //moveVector=moveVector*(maxSpeed/moveVector.magnitude);
         }
 
+        kickTimer+=Time.deltaTime;
+
+    }
+
+    public void Animate(){
         tonyHawkModelKicking.SetActive(true);
         tonyHawkModelIdle.SetActive(false);
 
-        kickTimer += Time.deltaTime;
-
-        if (kickTimer > 2f)
-        {
+        if(kickTimer>2f){
             tonyHawkModelKicking.SetActive(false);
             tonyHawkModelIdle.SetActive(true);
+        }
+
+        if(moveDir.x>0){
+            Quaternion newRot=Quaternion.Euler(new Vector3(0f,15f,90f));
+            tonyHawkModelIdle.transform.parent.localRotation=Quaternion.Lerp(tonyHawkModelIdle.transform.parent.localRotation,newRot,Time.deltaTime*rotSpeed);
+        }else if(moveDir.x<0){
+             Quaternion newRot=Quaternion.Euler(new Vector3(0f,-15f,90f));
+            tonyHawkModelIdle.transform.parent.localRotation=Quaternion.Lerp(tonyHawkModelIdle.transform.parent.localRotation,newRot,Time.deltaTime*rotSpeed);
+        }else{
+            Quaternion newRot=Quaternion.Euler(new Vector3(0f,0f,90f));
+            tonyHawkModelIdle.transform.parent.localRotation=Quaternion.Lerp(tonyHawkModelIdle.transform.parent.localRotation,newRot,Time.deltaTime*rotSpeed);
         }
     }
 

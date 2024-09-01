@@ -153,11 +153,12 @@ MonoBehaviour:
   moveCamera: 1
   airResistance: 0.01
   drag: 0.5
-  gravityModifier: 2
+  gravityModifier: 1
   kickMaxTime: 1
   cameraFOVLerpSpeed: 0.4
   tonyHawkModelIdle: {fileID: 9205373993086463389}
   tonyHawkModelKicking: {fileID: 35978592528397035}
+  rotSpeed: 2
 --- !u!54 &8616833499549819283
 Rigidbody:
   m_ObjectHideFlags: 0
