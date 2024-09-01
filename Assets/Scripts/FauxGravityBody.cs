@@ -30,7 +30,7 @@ public class FauxGravityBody : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        //FindAttractor();
+        FindAttractor();
         attractor.Attract(myTransform, insideGravityField, rotationSpeed, weight);
     }
 
