@@ -30,6 +30,7 @@ public class FauxGravityBody : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        FindAttractor();
         attractor.Attract(myTransform, insideGravityField, rotationSpeed, weight);
     }
 
@@ -47,12 +48,13 @@ public class FauxGravityBody : MonoBehaviour
     public void FindAttractor(){
         FauxGravityAttractor currentAttractor=attractor;
         FauxGravityAttractor newAttractor=currentAttractor;
-        float minDistance=Vector3.Distance(transform.position,currentAttractor.transform.position);
+        float currentDistance=Vector3.Distance(transform.position,currentAttractor.transform.position);;
+        float minDistance=currentDistance;
         float d;
         for(int i=0;i<attractors.Length;i++){
             if(attractors[i]!=currentAttractor){
-                d=Vector3.Distance(transform.position,currentAttractor.transform.position);
-                if(d<minDistance*0.75 && d<minDistance){
+                d=Vector3.Distance(transform.position,attractors[i].transform.position);
+                if(d<currentDistance*0.5 && d<minDistance){
                     newAttractor=attractors[i];
                     minDistance=d;
                 }
@@ -60,6 +62,9 @@ public class FauxGravityBody : MonoBehaviour
         }
         if(newAttractor!=currentAttractor){
             ChangeAttractor(newAttractor);
+            Debug.Log("new attractor");
+            Debug.Log(newAttractor);
+            insideGravityField=false;
         }
     }
 }

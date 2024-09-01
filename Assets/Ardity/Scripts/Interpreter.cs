@@ -9,17 +9,19 @@ public class InterpretArduino : MonoBehaviour
     public SerialController serialController;
     
     private Vector2 currentInput = Vector2.zero;
+    private bool kickInput = false;
 
     void OnMessageArrived(string msg)
     {
-        //Debug.Log(msg);
         string[] values = msg.Split(",");
         float x = int.Parse(values[0]);
         float y = int.Parse(values[1]);
         x = -2 * ((x / 1023) - 0.5f);
         y = 2 * ((y / 1023) - 0.5f);
-        //Debug.Log(new Vector2(x, y));
         currentInput = new Vector2(x, y);
+
+        int kickInt = int.Parse(values[2]);
+        kickInput = true ? kickInt == 1 : false;
         //tmsg is the information you are bringing into Unity. It comes in as a string that you will parce HERE
     }
 
@@ -32,5 +34,10 @@ public class InterpretArduino : MonoBehaviour
     public Vector2 GetCurrentInput()
     {
         return currentInput;
+    }
+
+    public bool GetKickInput()
+    {
+        return kickInput;
     }
 }

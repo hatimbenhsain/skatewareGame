@@ -6,25 +6,25 @@ using UnityEngine;
 public class PlayerController : MonoBehaviour
 {
     public InterpretArduino interpretArduino;
-    
-    public float moveSpeed=0f;
+
+    public float moveSpeed = 0f;
     private Vector3 moveDir;
     private Rigidbody body;
 
-    public float initSpeed=1f;
-    public float acceleration=5f;
-    public float maxSpeed=10f;
-    public float deceleration=5f;
+    public float initSpeed = 1f;
+    public float acceleration = 5f;
+    public float maxSpeed = 10f;
+    public float deceleration = 5f;
 
-    public float jumpForce=5f;
+    public float jumpForce = 5f;
 
     private Vector3 lastDir;
     private Vector3 moveVector;
 
-    private bool grounded=true;
-    private bool slow=false;
+    private bool grounded = true;
+    private bool slow = false;
 
-    public float slowFactor=0.5f;
+    public float slowFactor = 0.5f;
 
     public Transform cameraCloseTransform;
     public Transform cameraFarTransform;
@@ -32,37 +32,42 @@ public class PlayerController : MonoBehaviour
     private GameObject camera;
 
 
-    private float initHeight=10f;
-    private float maxHeight=20f;
+    private float initHeight = 10f;
+    private float maxHeight = 20f;
 
     private FauxGravityBody fauxGravityBody;
 
-    private bool reachedPeak=false;
+    private bool reachedPeak = false;
 
-    public float cameraLerpSpeed=10f;
+    public float cameraLerpSpeed = 10f;
 
-    public bool moveCamera=false;
+    public bool moveCamera = false;
 
-    public float airResistance=1f;
+    public float airResistance = 1f;
 
     public float drag;
 
-    public float gravityModifier=1f;
+    public float gravityModifier = 1f;
 
     private float kickTimer;
-    public float kickMaxTime=1f;
+    public float kickMaxTime = 1f;
 
-    private bool justJumped=false;
-    private float targetFOV=60f;
-    public float cameraFOVLerpSpeed=.1f;
+    private bool justJumped = false;
+    private float targetFOV = 60f;
+    public float cameraFOVLerpSpeed = .1f;
+
+    public GameObject tonyHawkModelIdle;
+    public GameObject tonyHawkModelKicking;
+
+    public float rotSpeed=10f;
 
     void Start()
     {
-        body=GetComponent<Rigidbody>();
-        moveVector=Vector3.zero;
-        camera=Camera.main.gameObject;
-        fauxGravityBody=GetComponent<FauxGravityBody>();
-        drag=body.drag;
+        body = GetComponent<Rigidbody>();
+        moveVector = Vector3.zero;
+        camera = Camera.main.gameObject;
+        fauxGravityBody = GetComponent<FauxGravityBody>();
+        drag = body.drag;
     }
 
     // Update is called once per frame
@@ -76,99 +81,147 @@ public class PlayerController : MonoBehaviour
         Jump();
 
 
-        
+        Animate();        
 
         // Distance between current attractor and body
-        float dis=Vector3.Distance(transform.position,fauxGravityBody.attractor.transform.position);
+        float dis = Vector3.Distance(transform.position, fauxGravityBody.attractor.transform.position);
 
 
-        if(!reachedPeak && dis>=maxHeight){
+        if (!reachedPeak && dis >= maxHeight)
+        {
             // Did I reach peak of jump
-            reachedPeak=true;
+            reachedPeak = true;
             Debug.Log("reached peak");
         }
 
- 
+
     }
 
-    public void SetMoveVector(){
+    public void SetMoveVector()
+    {
         //slow=Input.GetMouseButton(1);
 
-        moveDir=GetInputVector();
+        moveDir = GetInputVector();
 
-        float acc=acceleration;
-        float ms=maxSpeed;
-        float dec=deceleration;
+        float acc = acceleration;
+        float ms = maxSpeed;
+        float dec = deceleration;
 
         // Slowing down movement
-        if(slow){
-            float k=slowFactor;
-            acc=acc*k;
-            ms=ms*k;
-            dec=dec*k;
+        if (slow)
+        {
+            float k = slowFactor;
+            acc = acc * k;
+            ms = ms * k;
+            dec = dec * k;
         }
 
-        if(moveDir.magnitude>0f && grounded){
-            if(moveVector.magnitude<0.05f){
+        if (moveDir.magnitude > 0f && grounded)
+        {
+            if (moveVector.magnitude < 0.05f)
+            {
                 //Minimum speed at smallest joystick movement
-                moveVector=moveDir*initSpeed;
-            }else{
+                moveVector = moveDir * initSpeed;
+            }
+            else
+            {
                 //Accelerating over time
-                moveVector+=moveDir*acc*Time.deltaTime;
+                moveVector += moveDir * acc * Time.deltaTime;
             }
         }
+
         //Slowing down if no input OR going over maximum speed
-        if(moveDir.magnitude==0f || moveVector.magnitude>moveDir.magnitude*ms){
-            if(moveVector.magnitude>0f){
-                moveVector-=dec*moveVector.normalized*Time.deltaTime;
+        if (moveDir.magnitude == 0f || moveVector.magnitude > moveDir.magnitude * ms)
+        {
+            if (moveVector.magnitude > 0f)
+            {
+                moveVector -= dec * moveVector.normalized * Time.deltaTime;
             }
         }
 
-        moveVector=Vector3.ClampMagnitude(moveVector,ms);
+        moveVector = Vector3.ClampMagnitude(moveVector, ms);
 
-        if(fauxGravityBody.insideGravityField){
-            body.drag=drag;
-        }else{
-            body.drag=0;
+        if (fauxGravityBody.insideGravityField)
+        {
+            body.drag = drag;
+        }
+        else
+        {
+            body.drag = 0;
         }
 
     }
 
-    public void Jump(){
+    public void Jump()
+    {
         //Handling Jump when key down
-        if(Input.GetKeyDown(KeyCode.Space) && grounded){
-            body.velocity=transform.up*jumpForce;
-            body.velocity+=moveVector;
-            justJumped=true;
+        if (Input.GetKeyDown(KeyCode.Space) && grounded)
+        {
+            body.velocity = transform.up * jumpForce;
+            body.velocity += moveVector;
+            justJumped = true;
         }
 
         //Handling continuous jump button press
         // Only halfing gravity if still going up
-        if(Input.GetKey(KeyCode.Space) && transform.InverseTransformDirection(body.velocity).y>0){
+        if (Input.GetKey(KeyCode.Space) && transform.InverseTransformDirection(body.velocity).y > 0)
+        {
             Debug.Log("pressing space while going up");
-            fauxGravityBody.halveGravity=true;
-        }else{
-            fauxGravityBody.halveGravity=false;
+            fauxGravityBody.halveGravity = true;
+        }
+        else
+        {
+            fauxGravityBody.halveGravity = false;
         }
     }
 
 
-    public void Kick(){
-
-        if(Input.GetKeyDown(KeyCode.Return) && kickTimer>kickMaxTime && grounded){
-            kickTimer=0f;
-            moveVector=moveVector+moveDir*maxSpeed;
-            moveVector=Vector3.ClampMagnitude(moveVector,maxSpeed);
-            //moveVector=moveVector*(maxSpeed/moveVector.magnitude);
-        }
-
+    public void Kick()
+    {
         kickTimer+=Time.deltaTime;
+
+        if (GetKickInput() && kickTimer > kickMaxTime && grounded)
+        {
+            kickTimer = 0f;
+            moveVector = moveVector + moveDir * maxSpeed;
+            moveVector = Vector3.ClampMagnitude(moveVector, maxSpeed);
+            //moveVector=moveVector*(maxSpeed/moveVector.magnitude);
+            tonyHawkModelKicking.GetComponent<Animator>().Play("kicking",-1,0f);
+        }
+
+        
+
     }
 
-    public Vector3 GetInputVector(){
+    public void Animate(){
+        tonyHawkModelKicking.SetActive(true);
+        tonyHawkModelIdle.SetActive(false);
+
+        if(kickTimer>2f){
+            tonyHawkModelKicking.SetActive(false);
+            tonyHawkModelIdle.SetActive(true);
+        }
+
+        if(moveDir.x>0){
+            Quaternion newRot=Quaternion.Euler(new Vector3(0f,15f,90f));
+            tonyHawkModelIdle.transform.parent.localRotation=Quaternion.Lerp(tonyHawkModelIdle.transform.parent.localRotation,newRot,Time.deltaTime*rotSpeed);
+        }else if(moveDir.x<0){
+             Quaternion newRot=Quaternion.Euler(new Vector3(0f,-15f,90f));
+            tonyHawkModelIdle.transform.parent.localRotation=Quaternion.Lerp(tonyHawkModelIdle.transform.parent.localRotation,newRot,Time.deltaTime*rotSpeed);
+        }else{
+            Quaternion newRot=Quaternion.Euler(new Vector3(0f,0f,90f));
+            tonyHawkModelIdle.transform.parent.localRotation=Quaternion.Lerp(tonyHawkModelIdle.transform.parent.localRotation,newRot,Time.deltaTime*rotSpeed);
+        }
+    }
+
+    private bool GetKickInput()
+    {
+        return Input.GetKeyDown(KeyCode.Return) || interpretArduino.GetKickInput();
+    }
+
+public Vector3 GetInputVector(){
         Vector3 v1=new Vector3(Input.GetAxisRaw("Horizontal"),0,Input.GetAxisRaw("Vertical")).normalized;
         Vector2 input = interpretArduino.GetCurrentInput();
-        Debug.Log(input);
         Vector3 v2=new Vector3(input.y, 0, input.x);
         Vector3 v3=v1+v2;
         v3=new Vector3(Mathf.Clamp(v3.x,-1,1),Mathf.Clamp(v3.y,-1,1),Mathf.Clamp(v3.z,-1,1));
