@@ -155,7 +155,7 @@ public class PlayerController : MonoBehaviour
 
     public void Kick(){
 
-        if(Input.GetKeyDown(KeyCode.Return) && kickTimer>kickMaxTime){
+        if(Input.GetKeyDown(KeyCode.Return) && kickTimer>kickMaxTime && grounded){
             kickTimer=0f;
             moveVector=moveVector+moveDir*maxSpeed;
             moveVector=Vector3.ClampMagnitude(moveVector,maxSpeed);
