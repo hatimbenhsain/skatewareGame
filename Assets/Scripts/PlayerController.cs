@@ -49,7 +49,8 @@ public class PlayerController : MonoBehaviour
 
     public float gravityModifier=1f;
 
-    private FauxGravityAttractor[] attractors;
+    private float kickTimer;
+    public float kickMaxTime=1f;
 
     void Start()
     {
@@ -58,7 +59,6 @@ public class PlayerController : MonoBehaviour
         camera=Camera.main.gameObject;
         fauxGravityBody=GetComponent<FauxGravityBody>();
         drag=body.drag;
-        attractors=FindObjectsOfType<FauxGravityAttractor>();
     }
 
     // Update is called once per frame
@@ -66,6 +66,8 @@ public class PlayerController : MonoBehaviour
     {
 
         SetMoveVector();
+
+        Kick();
 
         Jump();
 
@@ -80,6 +82,7 @@ public class PlayerController : MonoBehaviour
             reachedPeak=true;
             Debug.Log("reached peak");
         }
+
  
     }
 
@@ -142,6 +145,18 @@ public class PlayerController : MonoBehaviour
         }else{
             fauxGravityBody.halveGravity=false;
         }
+    }
+
+    public void Kick(){
+
+        if(Input.GetKeyDown(KeyCode.Return) && kickTimer>kickMaxTime){
+            kickTimer=0f;
+            moveVector=moveVector+moveDir*maxSpeed;
+            moveVector=Vector3.ClampMagnitude(moveVector,maxSpeed);
+            //moveVector=moveVector*(maxSpeed/moveVector.magnitude);
+        }
+
+        kickTimer+=Time.deltaTime;
     }
 
     public Vector3 GetInputVector(){
@@ -214,22 +229,4 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    public void FindAttractor(){
-        FauxGravityAttractor currentAttractor=fauxGravityBody.attractor;
-        FauxGravityAttractor newAttractor=currentAttractor;
-        float minDistance=Vector3.Distance(transform.position,currentAttractor.transform.position);
-        float d;
-        for(int i=0;i<attractors.Length;i++){
-            if(attractors[i]!=currentAttractor){
-                d=Vector3.Distance(transform.position,currentAttractor.transform.position);
-                if(d<minDistance*0.75 && d<minDistance){
-                    newAttractor=attractors[i];
-                    minDistance=d;
-                }
-            }
-        }
-        if(newAttractor!=currentAttractor){
-            fauxGravityBody.ChangeAttractor(newAttractor);
-        }
-    }
 }
