@@ -108,8 +108,8 @@ SphereCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Radius: 0.5
-  m_Center: {x: 0, y: 0, z: 0}
+  m_Radius: 0.46
+  m_Center: {x: -0.2, y: 0.39, z: 0}
 --- !u!114 &4393643318315673246
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -124,6 +124,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   attractor: {fileID: 0}
   halveGravity: 0
+  insideGravityField: 0
+  rotationSpeed: 10
 --- !u!114 &1155869402676122819
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -136,6 +138,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fcaea78b6dc6dbc42859c9e4fe53050f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  interpretArduino: {fileID: 0}
   moveSpeed: 0
   initSpeed: 0.1
   acceleration: 0.5
@@ -147,6 +150,9 @@ MonoBehaviour:
   cameraFarTransform: {fileID: 8021751402544127718}
   cameraLerpSpeed: 10
   moveCamera: 1
+  airResistance: 1
+  drag: 0
+  gravityModifier: 1
 --- !u!54 &8616833499549819283
 Rigidbody:
   m_ObjectHideFlags: 0
