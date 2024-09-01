@@ -56,6 +56,9 @@ public class PlayerController : MonoBehaviour
     private float targetFOV=60f;
     public float cameraFOVLerpSpeed=.1f;
 
+    public GameObject tonyHawkModelIdle;
+    public GameObject tonyHawkModelKicking;
+
     void Start()
     {
         body=GetComponent<Rigidbody>();
@@ -162,7 +165,15 @@ public class PlayerController : MonoBehaviour
             //moveVector=moveVector*(maxSpeed/moveVector.magnitude);
         }
 
+        tonyHawkModelKicking.SetActive(true);
+        tonyHawkModelIdle.SetActive(false);
+
         kickTimer+=Time.deltaTime;
+
+        if(kickTimer>2f){
+            tonyHawkModelKicking.SetActive(false);
+            tonyHawkModelIdle.SetActive(true);
+        }
     }
 
     public Vector3 GetInputVector(){
