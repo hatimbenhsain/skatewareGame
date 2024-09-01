@@ -126,6 +126,7 @@ MonoBehaviour:
   halveGravity: 0
   insideGravityField: 0
   rotationSpeed: 10
+  weight: 1
 --- !u!114 &1155869402676122819
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -153,6 +154,8 @@ MonoBehaviour:
   airResistance: 0.01
   drag: 0.5
   gravityModifier: 0.5
+  kickMaxTime: 1
+  cameraFOVLerpSpeed: 0.4
 --- !u!54 &8616833499549819283
 Rigidbody:
   m_ObjectHideFlags: 0

@@ -52,6 +52,10 @@ public class PlayerController : MonoBehaviour
     private float kickTimer;
     public float kickMaxTime=1f;
 
+    private bool justJumped=false;
+    private float targetFOV=60f;
+    public float cameraFOVLerpSpeed=.1f;
+
     void Start()
     {
         body=GetComponent<Rigidbody>();
@@ -70,6 +74,7 @@ public class PlayerController : MonoBehaviour
         Kick();
 
         Jump();
+
 
         
 
@@ -134,7 +139,7 @@ public class PlayerController : MonoBehaviour
         if(Input.GetKeyDown(KeyCode.Space) && grounded){
             body.velocity=transform.up*jumpForce;
             body.velocity+=moveVector;
-            Debug.Log("jump");
+            justJumped=true;
         }
 
         //Handling continuous jump button press
@@ -146,6 +151,7 @@ public class PlayerController : MonoBehaviour
             fauxGravityBody.halveGravity=false;
         }
     }
+
 
     public void Kick(){
 
@@ -169,7 +175,7 @@ public class PlayerController : MonoBehaviour
         return v3;
     }
 
-    public void SetCameraPosition(){
+    public void SetCamera(){
         if (moveCamera){
         //Lerping the camera to player position
             if(slow){
@@ -179,6 +185,13 @@ public class PlayerController : MonoBehaviour
                 camera.transform.position=Vector3.Lerp(camera.transform.position,cameraFarTransform.transform.position,cameraLerpSpeed*Time.deltaTime);
                 camera.transform.rotation=Quaternion.Lerp(camera.transform.rotation,cameraFarTransform.transform.rotation,cameraLerpSpeed*Time.deltaTime);
             }
+
+            targetFOV=Mathf.Lerp(targetFOV,60,Time.deltaTime*cameraFOVLerpSpeed);
+            if(justJumped){
+                targetFOV=120;
+                justJumped=false;
+            }
+            camera.GetComponent<Camera>().fieldOfView=Mathf.Lerp(camera.GetComponent<Camera>().fieldOfView,targetFOV,10*Time.deltaTime);
         }
     }
 
@@ -200,7 +213,7 @@ public class PlayerController : MonoBehaviour
 
         //body.velocity=velocity;
 
-        SetCameraPosition();
+        SetCamera();
 
     }
 
