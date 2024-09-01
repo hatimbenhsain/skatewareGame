@@ -179,7 +179,6 @@ public class PlayerController : MonoBehaviour
     public Vector3 GetInputVector(){
         Vector3 v1=new Vector3(Input.GetAxisRaw("Horizontal"),0,Input.GetAxisRaw("Vertical")).normalized;
         Vector2 input = interpretArduino.GetCurrentInput();
-        Debug.Log(input);
         Vector3 v2=new Vector3(input.y, 0, input.x);
         Vector3 v3=v1+v2;
         v3=new Vector3(Mathf.Clamp(v3.x,-1,1),Mathf.Clamp(v3.y,-1,1),Mathf.Clamp(v3.z,-1,1));
