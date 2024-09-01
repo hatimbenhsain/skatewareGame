@@ -21,7 +21,7 @@ public class FauxGravityAttractor : MonoBehaviour
         gravityModifier=playerController.gravityModifier;
     }
 
-    public void Attract(Transform body, bool insideGravityField=true, float rotationSpeed=50f){
+    public void Attract(Transform body, bool insideGravityField=true, float rotationSpeed=50f, float weight=1f){
         Vector3 gravityUp=(body.position-transform.position).normalized;
         Vector3 bodyUp=body.up;
 
@@ -37,7 +37,7 @@ public class FauxGravityAttractor : MonoBehaviour
             g=g*0.5f;
         }
 
-        body.GetComponent<Rigidbody>().AddForce(gravityUp*g);
+        body.GetComponent<Rigidbody>().AddForce(gravityUp*g*weight);
 
         Quaternion targetRotation=Quaternion.FromToRotation(bodyUp,gravityUp)*body.rotation;
         body.rotation=Quaternion.Slerp(body.rotation,targetRotation,rotationSpeed*Time.deltaTime);

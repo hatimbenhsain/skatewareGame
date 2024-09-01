@@ -14,6 +14,8 @@ public class FauxGravityBody : MonoBehaviour
 
     public float rotationSpeed=10f;
     private FauxGravityAttractor[] attractors;
+
+    public float weight=1f;
     // Start is called before the first frame update
     void Start()
     {
@@ -28,7 +30,7 @@ public class FauxGravityBody : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        attractor.Attract(myTransform, insideGravityField, rotationSpeed);
+        attractor.Attract(myTransform, insideGravityField, rotationSpeed, weight);
     }
 
     public void ChangeAttractor(FauxGravityAttractor newAttractor){
