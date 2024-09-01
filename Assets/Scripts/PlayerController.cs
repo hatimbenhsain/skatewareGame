@@ -178,6 +178,7 @@ public class PlayerController : MonoBehaviour
 
     public void Kick()
     {
+        kickTimer+=Time.deltaTime;
 
         if (GetKickInput() && kickTimer > kickMaxTime && grounded)
         {
@@ -185,9 +186,10 @@ public class PlayerController : MonoBehaviour
             moveVector = moveVector + moveDir * maxSpeed;
             moveVector = Vector3.ClampMagnitude(moveVector, maxSpeed);
             //moveVector=moveVector*(maxSpeed/moveVector.magnitude);
+            tonyHawkModelKicking.GetComponent<Animator>().Play("kicking",-1,0f);
         }
 
-        kickTimer+=Time.deltaTime;
+        
 
     }
 
