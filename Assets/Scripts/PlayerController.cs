@@ -49,6 +49,8 @@ public class PlayerController : MonoBehaviour
 
     public float gravityModifier=1f;
 
+    private FauxGravityAttractor[] attractors;
+
     void Start()
     {
         body=GetComponent<Rigidbody>();
@@ -56,6 +58,7 @@ public class PlayerController : MonoBehaviour
         camera=Camera.main.gameObject;
         fauxGravityBody=GetComponent<FauxGravityBody>();
         drag=body.drag;
+        attractors=FindObjectsOfType<FauxGravityAttractor>();
     }
 
     // Update is called once per frame
@@ -212,6 +215,21 @@ public class PlayerController : MonoBehaviour
     }
 
     public void FindAttractor(){
-        
+        FauxGravityAttractor currentAttractor=fauxGravityBody.attractor;
+        FauxGravityAttractor newAttractor=currentAttractor;
+        float minDistance=Vector3.Distance(transform.position,currentAttractor.transform.position);
+        float d;
+        for(int i=0;i<attractors.Length;i++){
+            if(attractors[i]!=currentAttractor){
+                d=Vector3.Distance(transform.position,currentAttractor.transform.position);
+                if(d<minDistance*0.75 && d<minDistance){
+                    newAttractor=attractors[i];
+                    minDistance=d;
+                }
+            }
+        }
+        if(newAttractor!=currentAttractor){
+            fauxGravityBody.ChangeAttractor(newAttractor);
+        }
     }
 }

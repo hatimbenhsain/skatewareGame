@@ -142,17 +142,17 @@ MonoBehaviour:
   moveSpeed: 0
   initSpeed: 0.1
   acceleration: 0.5
-  maxSpeed: 1
-  deceleration: 0.5
-  jumpForce: 2
+  maxSpeed: 2
+  deceleration: 0.2
+  jumpForce: 7
   slowFactor: 0.5
   cameraCloseTransform: {fileID: 8021751402544127718}
   cameraFarTransform: {fileID: 8021751402544127718}
-  cameraLerpSpeed: 10
+  cameraLerpSpeed: 5
   moveCamera: 1
-  airResistance: 1
-  drag: 0
-  gravityModifier: 1
+  airResistance: 0.01
+  drag: 0.5
+  gravityModifier: 0.5
 --- !u!54 &8616833499549819283
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -162,7 +162,7 @@ Rigidbody:
   m_GameObject: {fileID: 477564068752349279}
   serializedVersion: 4
   m_Mass: 1
-  m_Drag: 0
+  m_Drag: 1
   m_AngularDrag: 0.05
   m_CenterOfMass: {x: 0, y: 0, z: 0}
   m_InertiaTensor: {x: 1, y: 1, z: 1}
