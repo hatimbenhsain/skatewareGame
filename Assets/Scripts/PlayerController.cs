@@ -61,6 +61,9 @@ public class PlayerController : MonoBehaviour
 
     public float rotSpeed=10f;
 
+    public AudioClip tonyHawkVFX;
+    private AudioSource audioSource;
+
     void Start()
     {
         body = GetComponent<Rigidbody>();
@@ -68,6 +71,7 @@ public class PlayerController : MonoBehaviour
         camera = Camera.main.gameObject;
         fauxGravityBody = GetComponent<FauxGravityBody>();
         drag = body.drag;
+        audioSource = GetComponent<AudioSource>();
     }
 
     // Update is called once per frame
@@ -219,7 +223,7 @@ public class PlayerController : MonoBehaviour
         return Input.GetKeyDown(KeyCode.Return) || interpretArduino.GetKickInput();
     }
 
-public Vector3 GetInputVector(){
+    public Vector3 GetInputVector(){
         Vector3 v1=new Vector3(Input.GetAxisRaw("Horizontal"),0,Input.GetAxisRaw("Vertical")).normalized;
         Vector2 input = interpretArduino.GetCurrentInput();
         Vector3 v2=new Vector3(input.y, 0, input.x);
@@ -285,6 +289,7 @@ public Vector3 GetInputVector(){
 
     private void OnTriggerEnter(Collider other){
         if(other.gameObject.tag=="Planet"){
+            audioSource.PlayOneShot(tonyHawkVFX);
             fauxGravityBody.ChangeAttractor(other.gameObject.GetComponentInParent<FauxGravityAttractor>());
         }
     }
